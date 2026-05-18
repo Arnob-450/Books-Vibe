@@ -1,22 +1,45 @@
 import { createContext, useState } from "react";
+import { toast } from "react-toastify";
 
 export const BookContext = createContext();
 const BookProvider = ({ children }) => {
-    const [storedBooks, SetStoredBooks] = useState([])
+    const [readList, SetReadList] = useState([])
+    const [wishList, setWishList] =useState([])
     const handelMarkAsRead = (currentBook) => {
-        const isExistBook = storedBooks.find((book) => book.bookId === currentBook.bookId);
+        const isExistBook = readList.find((book) => book.bookId === currentBook.bookId);
         if (isExistBook) {
-            alert('The book is already exist ')
+            toast.error('The book is already exist in read List ')
         }
         else {
-            SetStoredBooks([...storedBooks, currentBook])
-            alert(`${currentBook.bookName} is added to list`)
+            SetReadList([...readList, currentBook])
+            toast.success(`${currentBook.bookName} is added to read list`)
+        }
+    }
+    const handelWishList = (currentBook) => {
+       
+        const isExistInReadList = readList.find( (book)=>book.bookId === currentBook.bookId)
+
+        if(isExistInReadList){
+            toast.error('This book is already in read list');
+            return;
+        }
+
+        const isExistBook = wishList.find((book) => book.bookId === currentBook.bookId);
+        if (isExistBook) {
+            toast.error('The book is already in wish list ')
+        }
+        else {
+            setWishList([...wishList, currentBook])
+            toast.success(`${currentBook.bookName} is added to wish list`)
         }
     }
     const data ={
-        storedBooks,
-        SetStoredBooks,
+        readList,
+        SetReadList,
         handelMarkAsRead,
+        wishList,
+        setWishList,
+        handelWishList,
     }
     return (
         <BookContext.Provider value={data} >{children}</BookContext.Provider>

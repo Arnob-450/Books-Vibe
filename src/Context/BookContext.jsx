@@ -1,11 +1,21 @@
-import { createContext, useState } from "react";
+import { createContext,  useState } from "react";
 import { toast } from "react-toastify";
+import { addReadListToLocalDB, getAllReadListFromLocalDB } from "../Utils/localDB";
 
 export const BookContext = createContext();
 const BookProvider = ({ children }) => {
-    const [readList, SetReadList] = useState([])
-    const [wishList, setWishList] =useState([])
+    const [readList, SetReadList] = useState(()=>getAllReadListFromLocalDB())
+    const [wishList, setWishList] = useState([])
+    // useEffect(() => {
+    //     const getReadListFromLocalDB =  getAllReadListFromLocalDB();
+    //     console.log(getReadListFromLocalDB)
+    //     SetReadList(getReadListFromLocalDB);
+    // },[]
+    // )
+
+
     const handelMarkAsRead = (currentBook) => {
+        addReadListToLocalDB(currentBook)
         const isExistBook = readList.find((book) => book.bookId === currentBook.bookId);
         if (isExistBook) {
             toast.error('The book is already exist in read List ')
@@ -16,10 +26,10 @@ const BookProvider = ({ children }) => {
         }
     }
     const handelWishList = (currentBook) => {
-       
-        const isExistInReadList = readList.find( (book)=>book.bookId === currentBook.bookId)
 
-        if(isExistInReadList){
+        const isExistInReadList = readList.find((book) => book.bookId === currentBook.bookId)
+
+        if (isExistInReadList) {
             toast.error('This book is already in read list');
             return;
         }
@@ -33,7 +43,7 @@ const BookProvider = ({ children }) => {
             toast.success(`${currentBook.bookName} is added to wish list`)
         }
     }
-    const data ={
+    const data = {
         readList,
         SetReadList,
         handelMarkAsRead,

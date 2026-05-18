@@ -3,27 +3,39 @@ import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import 'react-tabs/style/react-tabs.css';
 import ListedReadList from "../../Component/ListedBooks/ListedReadList";
 import ListedWishList from "../../Component/ListedBooks/ListedWishList";
+import { useState } from "react";
 
 const Books = () => {
-    
-    
+
+    const [sortingType, setSortingType] = useState();
+    console.log(sortingType)
 
     return (
 
         <div className="container mx-auto my-3">
-           
-          
+
+            <div className="flex justify-center my-3 ">
+                <div className="dropdown dropdown-start">
+                    <div tabIndex={0} role="button" className="btn m-1">Sort bY ⬇️ {sortingType}</div>
+                    <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                        <li onClick={()=>setSortingType('pages')}><a>Pages</a></li>
+                        <li onClick={()=>setSortingType('rating')}><a>Rating</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
             <Tabs>
                 <TabList>
-                    <Tab>Read list</Tab>
-                    <Tab>Wish list</Tab>
+                    <Tab>Read List </Tab>
+                    <Tab>Wish List </Tab>
                 </TabList>
 
                 <TabPanel>
-                   <ListedReadList></ListedReadList>
+                    <ListedReadList sortingType={sortingType}></ListedReadList>
                 </TabPanel>
                 <TabPanel>
-                      <ListedWishList></ListedWishList>
+                    <ListedWishList sortingType={sortingType}></ListedWishList>
                 </TabPanel>
             </Tabs>
         </div>
